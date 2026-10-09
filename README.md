@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio: chat with me
 
-## Getting Started
+A minimal personal site: a photo and a chat. The chat answers questions about me using
+RAG over the Markdown files in `content/`, with the model served through Vercel AI Gateway.
+`/how-it-works` explains the pipeline with an interactive graph.
 
-First, run the development server:
+Stack: Next.js 16 (App Router), Tailwind v4, shadcn/ui, AI SDK v7, React Flow.
+
+## Setup
 
 ```bash
+npm install
+cp .env.example .env.local   # paste your AI_GATEWAY_API_KEY
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Make it yours
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| What | Where |
+| --- | --- |
+| Name, tagline, links, suggested questions, models | `src/lib/site.ts` |
+| Your photo | put it in `public/` (e.g. `public/me.jpg`), set `photo` in `site.ts` |
+| Knowledge base | paste `.md` files into `content/` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Any model on the gateway works: change `chatModel` (e.g. `openai/gpt-5`) or
+`embeddingModel` in `site.ts`.
 
-## Learn More
+## How it works
 
-To learn more about Next.js, take a look at the following resources:
+- `src/lib/rag.ts`: loads `content/**/*.md`, splits at headings into ~1,200-char overlapping
+  chunks, embeds them with `embedMany`, and keeps the vectors in memory. The index is keyed by
+  a hash of the files, so edits re-index on the next question.
+- `src/app/api/chat/route.ts`: embeds the latest question, takes the top 6 chunks by cosine
+  similarity, puts them in the instructions, and streams the answer with `streamText`. It also
+  sends a `data-sources` part, which the UI shows as source chips.
+- `src/app/api/retrieve/route.ts`: retrieval only, used by the "try it" box on `/how-it-works`.
+- `src/components/pipeline-graph.tsx`: the React Flow diagram.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Push to GitHub and import it in Vercel. On Vercel, AI Gateway authenticates via OIDC
+automatically. Elsewhere, set `AI_GATEWAY_API_KEY`. `next.config.ts` bundles `content/` with
+the API functions.
