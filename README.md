@@ -63,6 +63,30 @@ use shared persistent storage. Run `npm test` on Node 22.18+ for limiter tests.
 
 ## Deploy
 
+### Docker / Forge
+
+The root `Dockerfile` builds the app with Node 24 and runs Next.js standalone
+output as a non-root user on port 3000. It includes static assets, the headshot
+and the Markdown knowledge base. Environment files are excluded from the build
+context; set `AI_GATEWAY_API_KEY` as a runtime environment variable in Forge.
+
+In Forge, select the **Dockerfile** builder, use `Dockerfile` at the repository
+root, deploy `master`, and use `/` as the health path. Apply environment-variable
+changes before retrying the deployment.
+
+For other container hosts:
+
+```bash
+docker build -t francisco-portfolio .
+docker run --rm -p 3000:3000 --env-file .env francisco-portfolio
+```
+
+Social metadata defaults to `https://franciscopelayo.com`. To deploy to another
+domain, pass `--build-arg NEXT_PUBLIC_SITE_URL=https://your-domain.com` when
+building; changing a runtime variable alone does not update prerendered metadata.
+
+### Vercel
+
 Push to GitHub and import it in Vercel. On Vercel, AI Gateway authenticates via OIDC
 automatically. Elsewhere, set `AI_GATEWAY_API_KEY`. `next.config.ts` bundles `content/` with
 the API functions.
