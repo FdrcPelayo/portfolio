@@ -1,16 +1,18 @@
-// Edit these to make the site yours.
+// Francisco's public portfolio profile.
 export const site = {
-  name: "Your Name",
-  tagline: "Ask me anything about my work, projects and experience.",
-  photo: "/me.svg", // drop your photo in /public (e.g. /me.jpg) and point here
+  name: "Francisco Pelayo",
+  tagline: "DTU MSc graduate in Computer Science · Machine Learning & Data Science · Electrical Engineering background",
+  photo: "/headshot.jpeg",
+  email: "francisco.drcp@gmail.com",
   links: [
-    { label: "GitHub", href: "https://github.com/" },
-    { label: "LinkedIn", href: "https://linkedin.com/" },
+    { label: "GitHub", href: "https://github.com/FdrcPelayo/" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/fdrcpelayo/" },
+    { label: "Email", href: "mailto:francisco.drcp@gmail.com" },
   ],
   suggestions: [
     "Who are you?",
-    "What are you working on right now?",
-    "What's your tech stack?",
+    "What did you specialize in at DTU?",
+    "How does electrical engineering connect to your ML background?",
   ],
   // Any model available on Vercel AI Gateway: "provider/model"
   chatModel: "anthropic/claude-sonnet-5.5",

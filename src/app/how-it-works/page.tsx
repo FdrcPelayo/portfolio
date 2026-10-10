@@ -4,7 +4,7 @@ import { PipelineGraph } from "@/components/pipeline-graph"
 import { chunkMarkdown, loadDocuments } from "@/lib/rag"
 import { site } from "@/lib/site"
 
-export const metadata: Metadata = { title: `How it works · ${site.name}` }
+export const metadata: Metadata = { title: "How it works" }
 
 async function getStats() {
   "use cache"

@@ -25,6 +25,31 @@ npm run dev
 Any model on the gateway works: change `chatModel` (e.g. `openai/gpt-5`) or
 `embeddingModel` in `site.ts`.
 
+The headshot is `public/headshot.jpeg`; the generated FP logo is in
+`public/brand/fp-logo.png`. The logo is also used for the favicon and Apple icon.
+Page metadata includes Open Graph/Twitter sharing cards and Person structured data.
+Set `NEXT_PUBLIC_SITE_URL` for a custom domain; otherwise the Vercel production
+domain is used automatically.
+
+## Usage limits
+
+`src/lib/rate-limit.ts` limits each visitor to 10 requests per minute, 25,000
+tokens per hour and 2 simultaneous requests. Each instance also allows at most
+60 requests per minute, 250,000 tokens per hour and 10 simultaneous requests.
+Replies are capped at 800 output tokens. Chat and the retrieval playground share
+these limits. Oversized inputs are rejected before any AI calls.
+
+Token reservations include a conservative UTF-8 byte estimate for input, framing
+overhead and the maximum output, then reconcile with reported model usage. Query
+embeddings retain their conservative estimate; cached knowledge-base indexing
+is separate. Failed or aborted calls retain their reservation when usage is unknown.
+Visitors see a friendly invitation to contact Francisco by email when a limit is reached.
+
+Limits live in memory: they reset on restart and are independent across server
+instances. Vercel's trusted forwarding header identifies visitors by IP; outside
+Vercel, requests share one visitor bucket. For a strict deployment-wide budget,
+use shared persistent storage. Run `npm test` on Node 22.18+ for limiter tests.
+
 ## How it works
 
 - `src/lib/rag.ts`: loads `content/**/*.md`, splits at headings into ~1,200-char overlapping

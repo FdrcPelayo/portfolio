@@ -1,21 +1,25 @@
-# About me
+# Francisco Pelayo
 
-This is a placeholder. Replace this file (and add more) with real Markdown about yourself.
-The chat answers only from what is written in this folder.
+## About me
 
-## Background
+My name is Francisco Pelayo. I am an MSc graduate in Computer Science from the Technical University of Denmark (DTU), specializing in Machine Learning and Data Science. I also have a background in electrical engineering.
 
-Write a short bio here: where you're from, what you studied, what you care about.
+## Education and specialization
 
-## What I'm working on
+I graduated from DTU with an MSc in Computer Science. My specialization is Machine Learning and Data Science.
 
-Describe current projects, the problems they solve, and what you learned building them.
+My educational background also includes electrical engineering.
 
-## Skills
+## Professional profile
 
-- Languages and frameworks you use
-- Tools you're comfortable with
+My profile combines computer science, machine learning, data science and an electrical engineering background. When discussing possible future directions or approaches to technical problems, these are the foundations to draw on.
 
-## Contact
+## Short bio
 
-How people should reach you.
+Francisco Pelayo is an MSc graduate in Computer Science from the Technical University of Denmark (DTU), specializing in Machine Learning and Data Science, with a background in electrical engineering.
+
+## Contact and profiles
+
+- Email: [francisco.drcp@gmail.com](mailto:francisco.drcp@gmail.com)
+- LinkedIn: [Francisco Pelayo](https://www.linkedin.com/in/fdrcpelayo/)
+- GitHub: [FdrcPelayo](https://github.com/FdrcPelayo/)
