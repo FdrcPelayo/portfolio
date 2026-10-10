@@ -4,7 +4,7 @@ import { site } from "@/lib/site"
 
 export default function Home() {
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 pb-6">
+    <main className="mx-auto flex h-[calc(100dvh-4.5rem)] min-h-0 w-full max-w-3xl flex-none flex-col px-6 pb-4">
       <Chat
         intro={
           <div className="flex flex-col items-center gap-4 text-center">

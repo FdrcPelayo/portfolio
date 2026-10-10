@@ -139,7 +139,7 @@ const STEPS: Record<StepId, Step> = {
     lane: "query",
     position: { x: 780, y: 400 },
     body: () =>
-      "The retrieved chunks are wrapped in <doc> tags and placed in the system instructions. The model is told to answer in the first person, using only those documents, and to say so when it doesn't know. The last 12 chat messages go along too, so follow-up questions work.",
+      "The retrieved chunks are wrapped in <doc> tags and placed in the system instructions. The model answers in the first person and can interpret the profile for open-ended or hypothetical questions, while keeping biographical facts grounded in the documents. The last 12 chat messages go along too, so follow-up questions work.",
     file: "src/app/api/chat/route.ts → instructions()",
   },
   llm: {

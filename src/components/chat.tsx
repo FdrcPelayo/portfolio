@@ -15,37 +15,64 @@ import { cn } from "@/lib/utils"
 export function Chat({ intro }: { intro: ReactNode }) {
   const [input, setInput] = useState("")
   const { messages, sendMessage, status, stop, error } = useChat<ChatMessage>({ id: "portfolio" })
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const transcriptRef = useRef<HTMLDivElement>(null)
+  const followRef = useRef(true)
   const busy = status === "submitted" || status === "streaming"
   const empty = messages.length === 0
 
   useEffect(() => {
-    if (!empty) bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" })
+    const transcript = transcriptRef.current
+    if (!empty && transcript && followRef.current) {
+      transcript.scrollTop = transcript.scrollHeight
+    }
   }, [messages, status, empty])
+
+  useEffect(() => {
+    const transcript = transcriptRef.current
+    if (!transcript) return
+    const observer = new ResizeObserver(() => {
+      if (followRef.current) transcript.scrollTop = transcript.scrollHeight
+    })
+    observer.observe(transcript)
+    return () => observer.disconnect()
+  }, [empty])
 
   function send(text: string) {
     const trimmed = text.trim()
     if (!trimmed || busy) return
+    followRef.current = true
     sendMessage({ text: trimmed })
     setInput("")
   }
 
   return (
-    <div className="flex flex-1 flex-col">
-      <div className={cn("flex justify-center", empty ? "flex-1 items-center pb-10" : "pt-4 pb-2")}>{intro}</div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className={cn("flex shrink-0 justify-center", empty ? "flex-1 items-center pb-10" : "pt-4 pb-2")}>{intro}</div>
 
       {!empty && (
-        <div className="flex-1 space-y-6 py-8">
+        <div
+          ref={transcriptRef}
+          role="log"
+          aria-label="Conversation"
+          className="min-h-0 flex-1 space-y-6 overflow-y-auto overscroll-contain py-6 pr-2 [overflow-wrap:anywhere]"
+          onScroll={(event) => {
+            const el = event.currentTarget
+            followRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 48
+          }}
+        >
           {messages.map((m) => (
             <Message key={m.id} message={m} />
           ))}
           {status === "submitted" && <Thinking />}
-          {error && <p className="text-sm text-destructive">Something went wrong. Please try again.</p>}
-          <div ref={bottomRef} />
+          {error && (
+            <p role="alert" className="text-sm text-destructive">
+              My agent is taking a break. Please try again, or <a href={`mailto:${site.email}`} className="underline underline-offset-3">email me directly</a>.
+            </p>
+          )}
         </div>
       )}
 
-      <div className="sticky bottom-0 space-y-3 bg-background pt-2 pb-2">
+      <div className="shrink-0 space-y-3 bg-background pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         {empty && (
           <div className="flex flex-wrap justify-center gap-2">
             {site.suggestions.map((s) => (
@@ -76,6 +103,8 @@ export function Chat({ intro }: { intro: ReactNode }) {
               }
             }}
             placeholder="Ask me something..."
+            aria-label="Your message"
+            maxLength={2000}
             rows={1}
             className="max-h-40 min-h-12 resize-none border-0 bg-transparent px-4 py-3.5 pr-14 shadow-none focus-visible:ring-0 dark:bg-transparent"
           />

@@ -85,6 +85,8 @@ async function getIndex(): Promise<Index> {
     const { embeddings } = await embedMany({
       model: site.embeddingModel,
       values: chunks.map((c) => `${c.heading}\n\n${c.text}`),
+      maxRetries: 0,
+      abortSignal: AbortSignal.timeout(20_000),
     })
     return { hash, chunks, vectors: embeddings }
   })()
@@ -94,10 +96,10 @@ async function getIndex(): Promise<Index> {
   return cached
 }
 
-export async function retrieve(query: string): Promise<Retrieved[]> {
+export async function retrieve(query: string, abortSignal?: AbortSignal): Promise<Retrieved[]> {
   const index = await getIndex()
   if (index.chunks.length === 0) return []
-  const { embedding } = await embed({ model: site.embeddingModel, value: query })
+  const { embedding } = await embed({ model: site.embeddingModel, value: query, maxRetries: 0, abortSignal })
   return index.chunks
     .map((c, i) => ({ ...c, score: cosineSimilarity(embedding, index.vectors[i]) }))
     .filter((c) => c.score >= MIN_SCORE)
