@@ -91,3 +91,12 @@ test("body size is checked even without Content-Length", async () => {
   await assert.rejects(readJson(new Request("http://localhost", { method: "POST", body: "x".repeat(100) }), 50), /too large/)
   await assert.rejects(readJson(new Request("http://localhost", { method: "POST", body: "invalid" })))
 })
+
+test("the shared bucket gets the site-wide allowance", () => {
+  const limiter = createUsageLimiter()
+  for (let i = 0; i < usageLimits.requestsPerMinute; i++) limiter.admit("shared").settle(0)
+  const ticket = limiter.admit("shared")
+  assert.ok(ticket)
+  assert.ok(ticket.reserve(usageLimits.tokensPerHour + 1))
+  ticket.settle()
+})
