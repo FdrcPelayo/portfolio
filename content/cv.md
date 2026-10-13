@@ -16,7 +16,7 @@ A two-person thesis, written with a fellow student. I focused more on the synthe
 - Also found that current XAI evaluation metrics often don't match what the explanations visibly show.
 - A paper based on the thesis, adding a comparison against LRP (Layer-wise Relevance Propagation), is currently under peer review. Built in PyTorch.
 
-## Fudl: flag football video analysis (personal project, since July 2026)
+## Fudl: flag football video analysis (personal project, main development since July 2026)
 
 A computer vision pipeline that turns flag football game film into data: it finds every play, times the snap, maps the camera image onto the field in yards, detects and tracks players, separates teams and officials, and cuts games into individual plays. The machine learning and computer vision side is my solo work; a friend will build the front end. The repository is private while in development. Full details are in the Fudl write-up.
 

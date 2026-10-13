@@ -2,7 +2,7 @@
 
 ### What is Fudl?
 
-Fudl is a computer vision project I started in July 2026. Flag football has almost no data or analytics, so I'm building a pipeline that watches game film and extracts that data automatically. It finds every play, times the snap, maps the camera image onto the real field in yards, detects and tracks every player, separates the two teams and the officials, and cuts each game into individual plays with a bird's-eye view of the routes.
+Fudl is a computer vision project I've been building seriously since July 2026, after earlier experiments. Flag football has almost no data or analytics, so I'm building a pipeline that watches game film and extracts that data automatically. It finds every play, times the snap, maps the camera image onto the real field in yards, detects and tracks every player, separates the two teams and the officials, and cuts each game into individual plays with a bird's-eye view of the routes.
 
 It's a personal project. I make the design decisions, and I run every experiment against labelled data I built myself. It is a work in progress. Some stages are measured and working, some are proven on a few games, and some are still planned. Each answer below says which.
 

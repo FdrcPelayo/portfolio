@@ -1,6 +1,6 @@
 # Portfolio Knowledge Base
 
-> Source material for my portfolio chatbot. Answers are in my own words, lightly cleaned up from voice recordings.
+_(Source material for my portfolio chatbot. Answers are in my own words, lightly cleaned up from voice recordings.)_
 
 ## 1. Intro & Background
 ### Tell me about yourself.
@@ -93,21 +93,20 @@ There was no labeled footage to train on, so the first step was building the dat
 **2. Field mapping**
 - **Marked fields:** I started with an approach based on user clicks and the known field markings, using a **homography** to map the image to real-world distances and draw the field.
 - **Following the camera:** to map every frame of a play as the camera moves, I used **SIFT** feature matching with **RANSAC**.
-- **Unmarked / amateur fields:** where there are no lines, I first tried having the user click on the cones. It worked really well, even better than the line-based approach (which is more precise but needs more user input, which I'm trying to minimize).
+- **Unmarked / amateur fields:** where there are no lines, I first had the user click on the cones. It worked really well and needed less user input than the line-based approach, which is more precise but needs more clicks, and minimizing user input is a key goal.
 - I then scaled this up to a **cone detection model**. Because the cone distances are fixed, detecting just a few cones in a frame is enough to map the whole field. This is where the project is now.
 
 **3. Player detection and tracking**
-- Players are detected and tracked with **YOLO**, which gives very good results.
+- Players are detected with a fine-tuned **YOLO** model that also tells players apart from officials and other people, and tracked with **BoT-SORT**.
 - Using the field mapping, detections are constrained to the field boundaries to identify the **active players**.
 
 **4. Team separation**
-I tried several approaches:
-- **Color-based** separation on the player boxes: unreliable, since referees and color saturation threw it off.
-- **Unsupervised clustering**: worked, but not as well as I wanted.
-- **Training the detection model itself to identify each team's players**: this worked quite well, though not perfectly. Combined with field mapping, it lets me locate each team's players on the field.
+- **Kit colour:** clustering the players' torso colours finds both teams' kits automatically, with no colour typed in.
+- **Officials:** colour rules failed (striped shirts look too much like a white kit), so I made "official" a class in my detector.
+- **When colour fails** (for example black vs white kits): at the line of scrimmage the two teams are split spatially, which gives free labels to train a small per-game classifier.
 
 **5. Cutting play by play**
-This was the hardest part: knowing where a play starts and ends is a chicken-and-egg problem, since you need game context to extract information, but you need the information to build context. I used my domain knowledge: I know a player in a specific position is always **crouched at the snap**, so I built a model to detect that posture and movement.
+This was the hardest part: knowing where a play starts and ends is a chicken-and-egg problem, since you need game context to extract information, but you need the information to build context. I used my domain knowledge: the centre (the player who snaps the ball) is always **crouched at the snap**, so I detect that posture together with the players' movement to time the snap, which is where each play cut starts. The play ends when a referee walks to the spot of the next play.
 
 ### Tell me about a project that failed or didn't go as planned.
 _(pending)_
