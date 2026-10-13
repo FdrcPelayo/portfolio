@@ -39,6 +39,14 @@ export function createUsageLimiter(now = Date.now) {
 
   return {
     admit(key: string) {
+      // Every visitor lands in the shared bucket off Vercel, so it gets the
+      // site-wide allowance instead of a single visitor's.
+      const shared = key === SHARED_KEY
+      const perVisitor = {
+        requestsPerMinute: shared ? usageLimits.globalRequestsPerMinute : usageLimits.requestsPerMinute,
+        tokensPerHour: shared ? usageLimits.globalTokensPerHour : usageLimits.tokensPerHour,
+        concurrent: shared ? usageLimits.globalConcurrent : usageLimits.concurrentPerVisitor,
+      }
       const time = now()
       for (const [id, entry] of visitors) {
         if (!entry.active && time - entry.hour >= 3_600_000) visitors.delete(id)
@@ -52,11 +60,11 @@ export function createUsageLimiter(now = Date.now) {
       }
       refresh(visitor, time)
       if (
-        visitor.requests >= usageLimits.requestsPerMinute ||
+        visitor.requests >= perVisitor.requestsPerMinute ||
         global.requests >= usageLimits.globalRequestsPerMinute ||
-        visitor.tokens >= usageLimits.tokensPerHour ||
+        visitor.tokens >= perVisitor.tokensPerHour ||
         global.tokens >= usageLimits.globalTokensPerHour ||
-        visitor.active >= usageLimits.concurrentPerVisitor ||
+        visitor.active >= perVisitor.concurrent ||
         global.active >= usageLimits.globalConcurrent
       ) return null
 
@@ -71,7 +79,7 @@ export function createUsageLimiter(now = Date.now) {
         reserve(tokens: number) {
           if (settled || !Number.isSafeInteger(tokens) || tokens < 0) return false
           if (
-            visitor.tokens + tokens > usageLimits.tokensPerHour ||
+            visitor.tokens + tokens > perVisitor.tokensPerHour ||
             global.tokens + tokens > usageLimits.globalTokensPerHour
           ) return false
           reserved += tokens
@@ -95,6 +103,8 @@ export function createUsageLimiter(now = Date.now) {
   }
 }
 
+export const SHARED_KEY = "shared"
+
 export const usageLimiter = createUsageLimiter()
 
 export function visitorKey(req: Request) {
@@ -102,5 +112,5 @@ export function visitorKey(req: Request) {
   // trusting a spoofable client-supplied forwarding header.
   return process.env.VERCEL
     ? req.headers.get("x-vercel-forwarded-for")?.split(",")[0].trim() || "unknown"
-    : "shared"
+    : SHARED_KEY
 }
