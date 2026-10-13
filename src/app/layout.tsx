@@ -8,8 +8,8 @@ import "./globals.css"
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] })
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] })
 
-const title = `${site.name} | Machine Learning & Data Science`
-const description = "Meet Francisco Pelayo, a DTU MSc graduate in Computer Science specializing in Machine Learning and Data Science, with a background in electrical engineering. Explore his profile through an interactive conversation."
+const title = `${site.name} | AI & Algorithms`
+const description = "Meet Francisco Pelayo, a DTU MSc graduate in Computer Science specializing in AI and Algorithms, with a background in electrical engineering. Explore his profile through an interactive conversation."
 const host = process.env.VERCEL_PROJECT_PRODUCTION_URL || process.env.VERCEL_URL
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   applicationName: `${site.name} Portfolio`,
   authors: [{ name: site.name }],
   creator: site.name,
-  keywords: [site.name, "Machine Learning", "Data Science", "Computer Science", "DTU", "Electrical Engineering"],
+  keywords: [site.name, "Artificial Intelligence", "Algorithms", "Machine Learning", "Computer Science", "DTU", "Electrical Engineering"],
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -45,7 +45,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             email: site.email,
             sameAs: site.links.filter((link) => link.href.startsWith("https:")).map((link) => link.href),
             alumniOf: { "@type": "CollegeOrUniversity", name: "Technical University of Denmark" },
-            knowsAbout: ["Machine Learning", "Data Science", "Computer Science", "Electrical Engineering"],
+            knowsAbout: ["Artificial Intelligence", "Algorithms", "Machine Learning", "Computer Science", "Electrical Engineering"],
           }).replace(/</g, "\\u003c") }}
         />
         <TooltipProvider>

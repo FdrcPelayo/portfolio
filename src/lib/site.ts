@@ -1,7 +1,7 @@
 // Francisco's public portfolio profile.
 export const site = {
   name: "Francisco Pelayo",
-  tagline: "DTU MSc graduate in Computer Science · Machine Learning & Data Science · Electrical Engineering background",
+  tagline: "DTU MSc graduate in Computer Science · AI & Algorithms · Electrical Engineering background",
   photo: "/headshot.jpeg",
   email: "francisco.drcp@gmail.com",
   links: [

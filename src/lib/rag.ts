@@ -44,6 +44,8 @@ export function chunkMarkdown(source: string, markdown: string): Chunk[] {
   let heading = source.replace(/\.md$/, "")
   let body: string[] = []
   for (const line of markdown.split(/\r?\n/)) {
+    // Lines like "_(pending)_" are author notes, not content: never index them.
+    if (/^\s*_\(.*\)_\s*$/.test(line)) continue
     const match = /^#{1,6}\s+(.*)$/.exec(line)
     if (match) {
       if (body.join("").trim()) sections.push({ heading, body: body.join("\n").trim() })

@@ -3,7 +3,7 @@ import path from "node:path"
 import { ImageResponse } from "next/og"
 import { site } from "@/lib/site"
 
-export const alt = "Francisco Pelayo — Machine Learning & Data Science, DTU MSc graduate"
+export const alt = "Francisco Pelayo — AI & Algorithms, DTU MSc graduate"
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
@@ -17,7 +17,7 @@ export default async function OpenGraphImage() {
       <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
         <img src={`data:image/png;base64,${logo.toString("base64")}`} alt="" width={72} height={72} />
         <div style={{ display: "flex", fontSize: 66, fontWeight: 700, letterSpacing: -2, marginTop: 36, lineHeight: 1.05 }}>Francisco Pelayo</div>
-        <div style={{ display: "flex", fontSize: 28, marginTop: 24, lineHeight: 1.4 }}>Machine Learning &amp; Data Science</div>
+        <div style={{ display: "flex", fontSize: 28, marginTop: 24, lineHeight: 1.4 }}>AI &amp; Algorithms</div>
         <div style={{ display: "flex", fontSize: 22, color: "#525252", marginTop: 14 }}>DTU MSc · Electrical Engineering background</div>
         <div style={{ display: "flex", fontSize: 20, marginTop: 40 }}>Get to know me. Ask my portfolio.</div>
       </div>
